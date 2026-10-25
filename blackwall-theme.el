@@ -48,7 +48,7 @@ receding into the noise."
   (ice          "#BFC6D1")
   (steel        "#9AA3AE")
   (dim          "#6B7380")
-  (static       "#4E5563")
+  (static       "#575F6E")
 
   (wall-crimson "#FF2E4C")
   (wall-deep    "#B3413A")

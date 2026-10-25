@@ -1,4 +1,4 @@
-;;; shenzhou-themes.el --- Theme collection for the shenzhou Emacs config -*- lexical-binding: t; -*-
+;;; shenzhou-themes.el --- Dark themes for the shenzhou configuration -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026 neonmei
 
