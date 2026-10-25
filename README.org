@@ -1,0 +1,108 @@
+#+title: shenzhou-emacs-themes
+
+A Cyberpunk 2077 /Blackwall/ theme family for Emacs: the near-black void beyond the ICE barrier, the crimson static of the wall itself, and the game's signature ~#FCEE0A~ yellow and neon cyan for everything that carries data.
+
+Two variants, meant to be rotated:
+
+| theme            | background | character                                                                                                |
+|------------------+------------+----------------------------------------------------------------------------------------------------------|
+| ~blackwall~      | ~#050508~  | The barrier itself. Monochrome: everything is crimson, ember and grey, and strings recede into the noise. |
+| ~blackwall-2077~ | ~#060910~  | The wall lit up. The full game palette on a blue-tinted void — crimson keywords, cyan functions, teal types, acid strings. |
+
+Both are dark; they share one ink set, and ~blackwall~ is that set with the hue drained out.
+
+They are proper derivative themes built on the [[https://github.com/protesilaos/modus-themes][Modus themes]] infrastructure (version 5+), using ~modus-vivendi~ as the base palette. They therefore inherit the full Modus face coverage — magit, org, markdown, flymake, transient, corfu, marginalia, which-key, diff-hl, tab-bar and the rest — while applying the Blackwall palette on top.
+
+On top of that, ~shenzhou-themes.el~ carries explicit faces for packages Modus does not reach: ~meow~, ~org-modern~, ~neotree~, ~eat~, ~agent-shell~, ~dape~, ~cov~, ~consult-gh~, ~pr-review~, and the six ~mood-line~ faces Modus misses.
+
+* Requirements
+
+- Emacs 30.1+.
+- [[https://github.com/protesilaos/modus-themes][modus-themes]] 5.0+. Emacs ships a copy, which is used as a fallback if the package is not installed.
+
+* Installation
+
+** elpaca
+
+#+begin_src emacs-lisp
+(use-package shenzhou-themes
+  :ensure (:host github :repo "neonmei/shenzhou-emacs-themes")
+  :defer t)
+#+end_src
+
+** straight.el
+
+#+begin_src emacs-lisp
+(straight-use-package
+ '(shenzhou-themes :host github :repo "neonmei/shenzhou-emacs-themes"))
+#+end_src
+
+** Manually
+
+#+begin_src emacs-lisp
+(add-to-list 'custom-theme-load-path "/path/to/shenzhou-emacs-themes")
+(add-to-list 'load-path "/path/to/shenzhou-emacs-themes")
+#+end_src
+
+Note that ~custom-theme-load-path~ does /not/ search ~load-path~ — its default ~t~ element means ~data-directory/themes~. Both lists need the directory: the first so ~load-theme~ finds the themes, the second so they can ~require~ ~shenzhou-themes~.
+
+* Usage
+
+#+begin_src emacs-lisp
+(load-theme 'blackwall t)
+;; or
+(load-theme 'blackwall-2077 t)
+#+end_src
+
+Because the themes register with the Modus family ~shenzhou-themes~, you also get the Modus convenience commands:
+
+#+begin_src emacs-lisp
+(modus-themes-define-derivative-command shenzhou-themes select)
+(modus-themes-define-derivative-command shenzhou-themes list-colors)
+#+end_src
+
+~M-x shenzhou-themes-select~ then prompts for a theme, and ~M-x shenzhou-themes-list-colors~ renders the active palette.
+
+** Rotating by time of day
+
+With [[https://github.com/guidoschmidt/circadian.el][circadian]]:
+
+#+begin_src emacs-lisp
+(setq circadian-themes '((:sunrise . blackwall-2077)
+                         (:sunset  . blackwall)))
+#+end_src
+
+* Customisation
+
+Each variant exposes the standard Modus override hooks, so a palette entry can be changed without forking the theme:
+
+#+begin_src emacs-lisp
+(setq blackwall-palette-overrides
+      '((keyword cp-yellow)
+        (bg-main "#000000")))
+#+end_src
+
+Each theme gets its own ~<theme>-palette~, ~<theme>-palette-user~ and ~<theme>-palette-overrides~, named after the theme rather than the package — the same scheme the Modus themes use.
+
+The named inks every variant defines are ~void~, ~panel~, ~raise~, ~edge~, ~ice~, ~steel~, ~dim~, ~static~, ~wall-crimson~, ~wall-deep~, ~wall-blood~, ~ember~, ~cp-yellow~, ~neon-cyan~, ~ice-teal~, ~hot-magenta~, ~violet~, ~acid~, plus the ~*-lit~ brighter pairs used for the bright ANSI row.
+
+* Adding a variant
+
+~shenzhou-themes-deftheme~ takes a name, a docstring and palette deltas, which are prepended to ~shenzhou-themes-blackwall-palette~:
+
+#+begin_src emacs-lisp
+(require 'shenzhou-themes)
+
+(shenzhou-themes-deftheme blackwall-netwatch
+  "Cold Netwatch blues, with crimson reserved for the breach."
+  (void      "#070C14")
+  (neon-cyan "#00E5FF")
+  (keyword   neon-cyan)
+  (string    ice-teal))
+#+end_src
+
+Any name referenced by the shared face list must be defined by every variant, so redefine inks rather than deleting them.
+
+* Licence
+
+GPL-3.0-or-later.

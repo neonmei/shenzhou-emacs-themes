@@ -1,0 +1,7 @@
+*.elc
+*~
+\#*\#
+.\#*
+/.eldev/
+/.packages/
+/lcov.info
